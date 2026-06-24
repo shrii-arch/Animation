@@ -38,3 +38,27 @@
         transform: rotateX(-10deg) rotateY(360deg);
     }
 }
+/* 1. Make all cards transition smoothly when hovered */
+.banner .slider .item {
+    transition: transform 0.5s ease, filter 0.5s ease;
+    cursor: pointer;
+}
+
+/* 2. When hovering over the main slider area, fade out all cards slightly */
+.banner .slider:hover .item {
+    filter: brightness(0.4) blur(1px);
+}
+
+/* 3. Bring the specific hovered card back to full brightness, scale it up, and add a neon glow */
+.banner .slider .item:hover {
+    filter: brightness(1) blur(0px);
+    
+    /* This keeps its exact 3D position but scales it up by 10% */
+    transform: 
+        rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) 
+        translateZ(330px) /* Pushed out slightly further (from 300px to 330px) */
+        scale(1.1);
+        
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+}
