@@ -62,3 +62,52 @@
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
     border-radius: 8px;
 }
+/* 1. The dark background overlay covering the whole screen */
+.video-modal {
+    display: none; /* 🔑 Secret: Keeps it hidden until JS changes it to 'flex' */
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9); /* Dark backdrop */
+    z-index: 9999; /* Makes sure it floats above everything else */
+    justify-content: center;
+    align-items: center;
+}
+
+/* 2. The centered video player card box */
+.modal-content {
+    position: relative;
+    width: 80%;
+    max-width: 800px;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border: 2px solid #332055;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* 3. Make the video iframe fill the box completely */
+.video-player-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* 4. The absolute top-right close button design */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 10000;
+    transition: transform 0.2s;
+}
+.close-btn:hover {
+    transform: scale(1.2);
+    color: #ff4a4a;
+}

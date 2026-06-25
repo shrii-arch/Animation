@@ -20,6 +20,18 @@
             <div class="item" style="--position: 6" data-video="videoID6"><img src="hanakimi.jpg" alt=""></div>
         </div>
     </div>
+        <!-- THE VIDEO MODAL POPUP (Hidden by default) -->
+    <div id="videoModal" class="video-modal">
+        <div class="modal-content">
+            <!-- Close Button -->
+            <button class="close-btn" id="closeModalBtn">&times;</button>
+            
+            <!-- Video Container -->
+            <div class="video-player-wrapper">
+                <iframe id="videoIframe" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
             <script src="script.js"></script>
 </body>
 </html>
