@@ -67,22 +67,27 @@
     display: none; /* 🔑 Secret: Keeps it hidden until JS changes it to 'flex' */
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.9); /* Dark backdrop */
+    background: rgba(10, 6, 18, 0.75); /* Dark backdrop */
+    /* 🔑 The Magic Property: Blurs the rotating 3D cards behind the popup screen */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 9999; /* Makes sure it floats above everything else */
     justify-content: center;
     align-items: center;
+    transition: all 0.3s ease-in-out;
 }
 
 /* 2. The centered video player card box */
 .modal-content {
     position: relative;
-    width: 80%;
+    width: 85%;
     max-width: 800px;
     aspect-ratio: 16 / 9;
     background: #000;
-    border: 2px solid #332055;
-    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
     overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 32, 85, 0.3);
 }
 
 /* 3. Make the video iframe fill the box completely */
