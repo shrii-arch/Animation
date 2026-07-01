@@ -89,6 +89,35 @@
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 32, 85, 0.3);
 }
+/* =======================================================
+   MOBILE MODAL RESPONSIVENESS (SMARTPHONE VIEW OPTIMIZATION)
+   ======================================================= */
+
+/* Trigger rules when the visitor's screen width shrinks below 600px */
+@media (max-width: 600px) {
+    /* 🔑 Shrink the 3D circle radius from 300px to 200px so it fits narrow screens perfectly */
+    .banner .slider .item {
+        transform: 
+            rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) 
+            translateZ(200px) !important; /* Brought closer to the center */
+    }
+}
+
+    /* 1. Expand the video box to maximize smartphone screen space */
+    .modal-content {
+        width: 95% !important; /* Stretch wide across the phone viewport */
+        border-radius: 12px;   /* Slightly sharper corners for compact fit */
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* 2. Reposition the close button so it's easily tappable on a touchscreen */
+    .close-btn {
+        top: 4px;
+        right: 10px;
+        font-size: 34px; /* Larger hit target for thumbs */
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8); /* Stark visibility overlay shadow */
+    }
+}
 
 /* 3. Make the video iframe fill the box completely */
 .video-player-wrapper iframe {
