@@ -59,4 +59,53 @@ if (closeModalBtn) {
         }
     });
 }
+// =========================================================================
+// 5. SEAMLESS KEYBOARD NAVIGATION WITH SMOOTH RESUME FROM CURRENT STATE
+// =========================================================================
+let currentRotationY = 0;
+let resumeTimer = null;
+let autoSpinInterval = null;
 
+// Function to handle continuous smooth auto-rotation from the current angle
+function startSmoothAutoRotation() {
+    // Clear any existing background tracking engines to avoid multi-speed spins
+    clearInterval(autoSpinInterval);
+    
+    // Smoothly increment the angle over a tiny time delta interval
+    autoSpinInterval = setInterval(() => {
+        currentRotationY -= 0.3; // Adjust this number down for a slower, cleaner turn
+        carouselRing.style.transition = 'none'; // Wipes transitions so background spin is perfectly fluid
+        carouselRing.style.transform = `rotateX(-10deg) rotateY(${currentRotationY}deg)`;
+    }, 16); // ~60 Frames Per Second refresh calculation rate
+}
+
+// Kick off the initial continuous background rotation on page startup
+startSmoothAutoRotation();
+
+window.addEventListener('keydown', (event) => {
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        // Stop the background automatic spinning calculation loop instantly
+        clearInterval(autoSpinInterval);
+        clearTimeout(resumeTimer);
+        
+        // Add a smooth easing transition physics glide for your finger presses
+        carouselRing.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)';
+    }
+
+    if (event.key === "ArrowLeft") {
+        currentRotationY += 60; // Steps back 1 clean card sector track slot
+        carouselRing.style.transform = `rotateX(-10deg) rotateY(${currentRotationY}deg)`;
+    } 
+    else if (event.key === "ArrowRight") {
+        currentRotationY -= 60; // Steps forward 1 clean card sector track slot
+        carouselRing.style.transform = `rotateX(-10deg) rotateY(${currentRotationY}deg)`;
+    }
+
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        // Set up the countdown clock to pick back up after you let go of the keys
+        resumeTimer = setTimeout(() => {
+            console.log(`🔄 Resuming smooth infinite rotation right from: ${currentRotationY}°`);
+            startSmoothAutoRotation();
+        }, 2000); // Waits exactly 2 seconds of zero key interaction before resuming
+    }
+});

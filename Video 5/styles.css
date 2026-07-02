@@ -16,7 +16,6 @@
     height: 250px;
     transform-style: preserve-3d;
     transform: rotateX(-10deg);
-    animation: autoRotate 20s linear infinite;
 }
 .banner .slider .item{
     position: absolute;
@@ -117,7 +116,7 @@
         font-size: 34px; /* Larger hit target for thumbs */
         text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8); /* Stark visibility overlay shadow */
     }
-}
+
 
 /* 3. Make the video iframe fill the box completely */
 .video-player-wrapper iframe {
