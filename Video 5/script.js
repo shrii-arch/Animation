@@ -60,52 +60,77 @@ if (closeModalBtn) {
     });
 }
 // =========================================================================
-// 5. SEAMLESS KEYBOARD NAVIGATION WITH SMOOTH RESUME FROM CURRENT STATE
+// 5. SEAMLESS KEYBOARD NAVIGATION WITH DYNAMIC TEXT-SYNC
 // =========================================================================
 let currentRotationY = 0;
 let resumeTimer = null;
 let autoSpinInterval = null;
 
-// Function to handle continuous smooth auto-rotation from the current angle
-function startSmoothAutoRotation() {
-    // Clear any existing background tracking engines to avoid multi-speed spins
-    clearInterval(autoSpinInterval);
-    
-    // Smoothly increment the angle over a tiny time delta interval
-    autoSpinInterval = setInterval(() => {
-        currentRotationY -= 0.3; // Adjust this number down for a slower, cleaner turn
-        carouselRing.style.transition = 'none'; // Wipes transitions so background spin is perfectly fluid
-        carouselRing.style.transform = `rotateX(-10deg) rotateY(${currentRotationY}deg)`;
-    }, 16); // ~60 Frames Per Second refresh calculation rate
+// 💡 Data map matching your 6 exact anime cards in counter-clockwise order
+const animeMetadata = [
+    { title: "Spy x Family", desc: "A spy on an undercover mission marries an assassin and adopts a telepathic child." },
+    { title: "Your Name", desc: "Two high school students living in completely different parts of Japan suddenly discover they are swapping bodies." },
+    { title: "Demon Slayer", desc: "Tanjiro Kamado sets out on a perilous quest to hunt down malicious demons and restore his sister's human soul." },
+    { title: "Suzume", desc: "A teenage girl travels across Japan alongside a mysterious young man closing portals to prevent giant natural disasters." },
+    { title: "Hana Kimi", desc: "A classic high school romance comedy revolving around athletic rivalries and complex hidden identities." },
+    { title: "Dark Moon", desc: "Seven vampire brothers navigate a complex web of destiny, memory, and supernatural high school rivalries." }
+];
+
+let activeIndex = 0; // Tracks which card is center-forward index position
+const activeTitleText = document.getElementById('activeAnimeTitle');
+const activeDescText = document.getElementById('activeAnimeDesc');
+
+function updateTextPlateDisplay() {
+    if (activeTitleText && activeDescText) {
+        // Safe mathematical modulo clamps index tracking precisely between 0 and 5 loops
+        let normalizedIndex = ((activeIndex % 6) + 6) % 6;
+        
+        activeTitleText.textContent = animeMetadata[normalizedIndex].title;
+        activeDescText.textContent = animeMetadata[normalizedIndex].desc;
+    }
 }
 
-// Kick off the initial continuous background rotation on page startup
+// Function to handle continuous smooth auto-rotation from the current angle
+function startSmoothAutoRotation() {
+    clearInterval(autoSpinInterval);
+    
+    autoSpinInterval = setInterval(() => {
+        currentRotationY -= 0.3; // Your perfect custom velocity sweet spot stays untouched!
+        carouselRing.style.transition = 'none'; 
+        carouselRing.style.transform = `rotateX(-10deg) rotateY(${currentRotationY}deg)`;
+    }, 16); 
+}
+
+// Initial boot startup spin loop execution
 startSmoothAutoRotation();
 
 window.addEventListener('keydown', (event) => {
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-        // Stop the background automatic spinning calculation loop instantly
         clearInterval(autoSpinInterval);
         clearTimeout(resumeTimer);
         
-        // Add a smooth easing transition physics glide for your finger presses
         carouselRing.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)';
     }
 
     if (event.key === "ArrowLeft") {
-        currentRotationY += 60; // Steps back 1 clean card sector track slot
+        currentRotationY += 60; 
         carouselRing.style.transform = `rotateX(-10deg) rotateY(${currentRotationY}deg)`;
+        
+        activeIndex++; // Increments index alignment tracking parameter
+        updateTextPlateDisplay();
     } 
     else if (event.key === "ArrowRight") {
-        currentRotationY -= 60; // Steps forward 1 clean card sector track slot
+        currentRotationY -= 60; 
         carouselRing.style.transform = `rotateX(-10deg) rotateY(${currentRotationY}deg)`;
+        
+        activeIndex--; // Decrements index alignment tracking parameter
+        updateTextPlateDisplay();
     }
 
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-        // Set up the countdown clock to pick back up after you let go of the keys
         resumeTimer = setTimeout(() => {
             console.log(`🔄 Resuming smooth infinite rotation right from: ${currentRotationY}°`);
             startSmoothAutoRotation();
-        }, 2000); // Waits exactly 2 seconds of zero key interaction before resuming
+        }, 2000); 
     }
 });
