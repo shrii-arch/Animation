@@ -134,3 +134,58 @@ window.addEventListener('keydown', (event) => {
         }, 2000); 
     }
 });
+// =========================================================================
+// 6. MOUSE WHEEL & TRACKPAD INTERACTION ENGINE (Scroll to Spin!)
+// =========================================================================
+
+// Track a small cooldown timer so scrolling doesn't spin the wheel crazy fast
+let isScrollThrottled = false;
+
+window.addEventListener('wheel', (event) => {
+    // 1. If the user is currently scrolling over an open video modal window, let them scroll naturally
+    if (videoModal && videoModal.style.display === 'flex') return;
+    
+    // 2. Prevent the page from jumping up and down while spinning the carousel wheel
+    event.preventDefault();
+    
+    // 3. If the throttle cooldown is active, skip this frame calculation to keep things smooth
+    if (isScrollThrottled) return;
+    
+    // Stop the automatic background loop instantly on scroll detection
+    clearInterval(autoSpinInterval);
+    clearTimeout(resumeTimer);
+    
+    // Apply our custom smooth transition timing parameters
+    carouselRing.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1)';
+    
+    // Activate throttle gate
+    isScrollThrottled = true;
+    
+    // 4. READ SCROLL DIRECTION: event.deltaY is positive when scrolling DOWN, negative when UP
+    if (event.deltaY > 0) {
+        // Scroll Down -> Rotate Right
+        currentRotationY -= 60;
+        activeIndex--; 
+    } else {
+        // Scroll Up -> Rotate Left
+        currentRotationY += 60;
+        activeIndex++; 
+    }
+    
+    // Apply the structural 3D transformation matrices
+    carouselRing.style.transform = `rotateX(-10deg) rotateY(${currentRotationY}deg)`;
+    
+    // Update the bottom metadata text plate in perfect sync!
+    updateTextPlateDisplay();
+    
+    // 5. AUTO-RESUME DETECTOR: Set up the countdown clock when scrolling stops
+    resumeTimer = setTimeout(() => {
+        console.log("🔄 Scrolling paused. Auto-rotation smoothly resumed!");
+        startSmoothAutoRotation();
+    }, 2500); // Waits 2.5 seconds of no scrolling before resuming the 0.3 auto-spin
+    
+    // Release the throttle gate after 200 milliseconds to accept the next clean flick
+    setTimeout(() => {
+        isScrollThrottled = false;
+    }, 200);
+}, { passive: false }); // { passive: false } is strictly required to allow event.preventDefault() to work!
