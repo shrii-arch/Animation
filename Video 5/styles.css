@@ -174,3 +174,27 @@
     color: #555555;
     line-height: 1.6;
 }
+/* =======================================================
+   CINEMATIC GLOW EFFECT (ACTIVE CARD INTENSITY POOL)
+   ======================================================= */
+
+/* Ensure all slider items have a smooth transition for scale and shadows */
+.banner .slider .item {
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+                filter 0.5s ease, 
+                box-shadow 0.5s ease !important;
+}
+
+/* This class will be dynamically injected into the front-facing card only */
+.banner .slider .item.active-glow {
+    transform: 
+        rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg)) 
+        translateZ(300px) 
+        scale(1.12) !important; /* Gently expands the card by 12% */
+        
+    filter: brightness(1.15) contrast(1.05); /* Adds rich cinematic lighting contrast */
+    
+    /* Vibrant crimson neon drop shadow that matches your red title heading */
+    box-shadow: 0 0 30px rgba(255, 74, 74, 0.6), 0 10px 40px rgba(0, 0, 0, 0.8);
+    z-index: 50; /* Ensures the active card always stays on top layer bounds */
+}

@@ -79,16 +79,29 @@ const animeMetadata = [
 let activeIndex = 0; // Tracks which card is center-forward index position
 const activeTitleText = document.getElementById('activeAnimeTitle');
 const activeDescText = document.getElementById('activeAnimeDesc');
+const carouselItems = document.querySelectorAll('.banner .slider .item');
 
 function updateTextPlateDisplay() {
+
+    // Safe mathematical modulo clamps index tracking precisely between 0 and 5 loops
+    let normalizedIndex = ((activeIndex % 6) + 6) % 6;
+
     if (activeTitleText && activeDescText) {
-        // Safe mathematical modulo clamps index tracking precisely between 0 and 5 loops
-        let normalizedIndex = ((activeIndex % 6) + 6) % 6;
         
         activeTitleText.textContent = animeMetadata[normalizedIndex].title;
         activeDescText.textContent = animeMetadata[normalizedIndex].desc;
     }
+    // CINEMATIC SYNC ENGINE: Loop through cards and toggle the active glow layer
+    carouselItems.forEach((item, index) => {
+        // Remapped match: var(--position) matches index + 1
+        if (index === normalizedIndex) {
+            item.classList.add('active-glow'); // Pops the front card forward!
+        } else {
+            item.classList.remove('active-glow'); // Softly recedes background items
+        }
+    });
 }
+
 
 // Function to handle continuous smooth auto-rotation from the current angle
 function startSmoothAutoRotation() {
