@@ -100,6 +100,26 @@ function updateTextPlateDisplay() {
             item.classList.remove('active-glow'); // Softly recedes background items
         }
     });
+// =========================================================================
+// 7. DIRECT CARD CLICK MODAL ROUTER (Click Card to Watch!)
+// =========================================================================
+
+carouselItems.forEach((item) => {
+    item.addEventListener('click', () => {
+        // Grab the whitelisted YouTube URL string stored inside the card's data attribute
+        const videoUrl = item.getAttribute('data-video');     
+        if (videoUrl && videoModal && videoIframe) {
+            console.log(` Direct Card Click Activated! Streaming: ${videoUrl}`); 
+            // Inject the clean source URL path and trigger the autoplay rule
+            videoIframe.setAttribute('src', `${videoUrl}?autoplay=1`); 
+            // Pop the glassmorphism dark modal window smoothly into view overlaying the screen
+            videoModal.style.setProperty('display', 'flex', 'important');
+            // Halt the continuous background auto-spin loop while the user watches the trailer
+            if (autoSpinInterval) clearInterval(autoSpinInterval);
+            if (resumeTimer) clearTimeout(resumeTimer);
+        }
+    });
+});
 }
 
 
